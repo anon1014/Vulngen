@@ -1,0 +1,6 @@
+{
+  "title": "Internal user directory lookup",
+  "language": "python",
+  "cwe": "CWE-89",
+  "explanation": "find_user builds its SQL query by string concatenation, so a crafted name can bypass the is_admin filter."
+}

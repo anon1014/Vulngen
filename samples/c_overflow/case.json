@@ -1,0 +1,6 @@
+{
+  "title": "Configuration line parser",
+  "language": "c",
+  "cwe": "CWE-121",
+  "explanation": "parse_line copies the key into a 16-byte stack buffer using the input-controlled length, so a long key overflows the stack."
+}
