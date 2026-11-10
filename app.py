@@ -65,13 +65,15 @@ with tab_gen:
 
     b1, b2 = st.columns([1, 1])
     if b1.button("Generate with Gemini and verify", type="primary", disabled=not config.GEMINI_API_KEY):
-        from vulngen.llm import generate_case
+        from vulngen import llm
 
         chosen = random.choice(SCENARIOS) if scenario == "(random)" else scenario
         try:
             with st.spinner(f"Asking Gemini for {cwe} in {chosen}..."):
-                gc = generate_case(language, cwe, chosen)
-            case_id = store.save_case(gc, language, cwe, source=f"gemini:{config.GEN_MODEL}")
+                gc = llm.generate_case(language, cwe, chosen)
+            if llm.last_model_used != config.GEN_MODEL:
+                st.info(f"{config.GEN_MODEL} was busy, so this case was generated with {llm.last_model_used}.")
+            case_id = store.save_case(gc, language, cwe, source=f"gemini:{llm.last_model_used}")
             if image_ok:
                 with st.spinner("Verifying in sandbox..."):
                     ok, _ = verify.verify_case(case_id)
